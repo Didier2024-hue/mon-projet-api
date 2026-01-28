@@ -1,81 +1,89 @@
-📖 Description
-Cette API permet de générer des questionnaires (QCM) à partir d'une base de données de questions. Elle est développée avec FastAPI et offre une documentation interactive via OpenAPI/Swagger.
+FastAPI Quiz Generator API 🎯
+https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi
+https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
+https://img.shields.io/badge/License-MIT-blue.svg
 
-✨ Fonctionnalités
-✅ Vérification de l'état de l'API
+A high-performance REST API for generating customizable quizzes and MCQ tests, built with FastAPI. This API serves as a backend for educational platforms, mobile apps, and web applications requiring dynamic quiz generation.
 
-🎯 Génération de QCM personnalisés avec paramètres:
+✨ Features
+🎯 Dynamic Quiz Generation: Create custom quizzes based on test type, categories, and question count
 
-Type de test
+🔐 Secure Authentication: HTTP Basic Auth with role-based access (users & admin)
 
-Catégories de questions
+📝 Admin Question Management: Add new questions to the database via API
 
-Nombre de questions
+🎲 Intelligent Randomization: Unique quiz experiences with shuffled questions
 
-🔐 Authentification basique pour sécuriser les endpoints
+📊 CSV Data Integration: Efficient question storage and retrieval
 
-📝 Création de nouvelles questions (réservé aux administrateurs)
+📚 Interactive Documentation: Auto-generated OpenAPI/Swagger UI
 
-🎲 Randomisation des questions pour varier les QCM
+⚡ High Performance: Async support for concurrent requests
 
-🚀 Installation
-Prérequis
+🔍 Input Validation: Comprehensive parameter validation with clear errors
+
+🔄 CORS Support: Ready for web application integration
+
+🚀 Quick Start
+Prerequisites
 Python 3.8+
 
 pip
 
-Installation des dépendances
+Installation
+Clone the repository
+
 bash
-pip install fastapi uvicorn python-multipart
-Structure des fichiers
+git clone https://github.com/yourusername/fastapi-quiz-api.git
+cd fastapi-quiz-api
+Create and activate virtual environment
+
+bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+Install dependencies
+
+bash
+pip install -r requirements.txt
+Start the server
+
+bash
+uvicorn main:app --reload
+The API will be available at http://localhost:8000
+
+📖 API Documentation
+Once the server is running, access the interactive documentation:
+
+Swagger UI: http://localhost:8000/docs
+
+ReDoc: http://localhost:8000/redoc
+
+🔑 Authentication
+The API uses HTTP Basic Authentication. Available credentials:
+
+Username	Password	Role
+alice	wonderland	User
+bob	builder	User
+clementine	mandarine	User
+admin	4dm1N	Administrator
+Example Authorization Header:
+
 text
-fastapi_exam/
-├── main.py              # Point d'entrée de l'application
-├── questions.csv        # Base de données des questions
-├── optional_archi.txt   # Documentation d'architecture (optionnel)
-└── README.md           # Ce fichier
-📊 Structure des données
-Le fichier questions.csv contient les champs suivants:
+Authorization: Basic YWxpY2U6d29uZGVybGFuZA==
+📡 API Endpoints
+GET /verify
+Health check endpoint to verify API functionality.
 
-question: Intitulé de la question
-
-subject: Catégorie de la question
-
-correct: Liste des réponses correctes
-
-use: Type de QCM
-
-responseA, responseB, responseC, responseD: Réponses possibles
-
-🔑 Authentification
-L'API utilise l'authentification HTTP Basic avec les identifiants suivants:
-
-Utilisateur	Mot de passe
-alice	wonderland
-bob	builder
-clementine	mandarine
-admin	4dm1N
-Les identifiants doivent être encodés en Base64 et inclus dans les headers:
-
-text
-Authorization: Basic dXNlcjpwYXNz
-🌐 Endpoints
-1. GET /verify
-Vérifie que l'API est fonctionnelle.
-
-Exemple de réponse:
+Response:
 
 json
-{"message": "L'API est fonctionnelle."}
-2. POST /generate_quiz
-Génère un QCM basé sur les paramètres fournis.
+{
+  "message": "API is functional."
+}
+POST /generate_quiz
+Generate a custom quiz with specified parameters.
 
-Headers requis:
-
-text
-Authorization: Basic <base64_credentials>
-Content-Type: application/json
-Body (JSON):
+Request:
 
 json
 {
@@ -83,38 +91,95 @@ json
   "categories": ["math", "history"],
   "number_of_questions": 10
 }
-Réponse: Liste de questions au format JSON.
+Response: Array of question objects with question text, options, and correct answers.
 
-3. POST /create_question
-Crée une nouvelle question (réservé aux administrateurs).
+POST /create_question
+Add a new question to the database (Admin only).
 
-Body (JSON):
+Request:
 
 json
 {
   "admin_username": "admin",
   "admin_password": "4dm1N",
-  "question": "Quelle est la capitale de la France ?",
+  "question": "What is the capital of Germany?",
   "subject": "geography",
-  "correct": ["Paris"],
+  "correct": ["Berlin"],
   "use": "multiple_choice",
-  "responseA": "Londres",
-  "responseB": "Paris",
-  "responseC": "Berlin",
-  "responseD": "Madrid"
+  "responseA": "Munich",
+  "responseB": "Berlin",
+  "responseC": "Hamburg",
+  "responseD": "Cologne"
 }
-Réponse:
-
-json
-{"message": "Question créée avec succès."}
-🏃‍♂️ Démarrage
-Lancer le serveur
+📁 Project Structure
+text
+fastapi-quiz-api/
+├── main.py                 # FastAPI application
+├── questions.csv           # Question database (CSV format)
+├── requirements.txt        # Python dependencies
+├── README.md              # This file
+└── tests/                 # Test suite (optional)
+    └── test_api.py
+🧪 Running Tests
 bash
-uvicorn main:app --reload
-Accéder à la documentation
-Swagger UI: http://localhost:8000/docs
+# Install test dependencies
+pip install pytest httpx
 
-Redoc: http://localhost:8000/redoc
+# Run tests
+pytest tests/
+🐳 Docker Support
+bash
+# Build the Docker image
+docker build -t fastapi-quiz-api .
 
-🧪 Tests
-La documentation interactive (Swagger UI) permet de tester directement les endpoints depuis le navigateur.
+# Run the container
+docker run -p 8000:8000 fastapi-quiz-api
+📊 Data Model
+The questions are stored in questions.csv with the following columns:
+
+Column	Description
+question	Question text
+subject	Category (math, history, geography, etc.)
+correct	Comma-separated correct answers
+use	Test type (multiple_choice, etc.)
+responseA-D	Multiple choice options
+🔧 Configuration
+Default configuration can be modified in main.py:
+
+Authentication credentials
+
+Question limits
+
+CORS origins
+
+Server settings
+
+🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+Fork the repository
+
+Create your feature branch (git checkout -b feature/AmazingFeature)
+
+Commit your changes (git commit -m 'Add some AmazingFeature')
+
+Push to the branch (git push origin feature/AmazingFeature)
+
+Open a Pull Request
+
+📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+🙏 Acknowledgments
+Built with FastAPI
+
+Interactive docs powered by Swagger UI
+
+Inspired by educational technology needs
+
+📞 Support
+For support, please open an issue in the GitHub repository or contact the maintainers.
+
+Made with ❤️ for the developer community
+
+If you find this project helpful, please consider giving it a ⭐ on GitHub!
