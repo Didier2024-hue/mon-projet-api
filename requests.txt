@@ -1,0 +1,63 @@
+# ------------------------------
+# 1. Vérifier que l'API fonctionne
+# ------------------------------
+curl -X GET "http://127.0.0.1:8000/verify"
+
+# ------------------------------
+# 2. Générer un quiz (catégorie BDD avec alice:wonderland)
+# Exemple : No-SQL, Cassandra, MongoDB...
+# ------------------------------
+curl -X POST "http://127.0.0.1:8000/generate_quiz" \
+     -H "Authorization: Basic YWxpY2U6d29uZGVybGFuZA==" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "test_type": "Test de positionnement",
+           "categories": ["BDD"],
+           "number_of_questions": 5
+         }'
+
+# ------------------------------
+# 3. Générer un quiz avec la catégorie Systèmes distribués (bob:builder)
+# Exemple : Hadoop, MapReduce, CAP...
+# ------------------------------
+curl -X POST "http://127.0.0.1:8000/generate_quiz" \
+     -H "Authorization: Basic Ym9iOmJ1aWxkZXI=" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "test_type": "Test de positionnement",
+           "categories": ["Systèmes distribués"],
+           "number_of_questions": 5
+         }'
+
+# ------------------------------
+# 4. Générer un quiz avec la catégorie Docker (clementine:mandarine)
+# Exemple : Docker run, persistance, communication entre containers...
+# ------------------------------
+curl -X POST "http://127.0.0.1:8000/generate_quiz" \
+     -H "Authorization: Basic Y2xlbWVudGluZTptYW5kYXJpbmU=" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "test_type": "Test de positionnement",
+           "categories": ["Docker"],
+           "number_of_questions": 5
+         }'
+
+# ------------------------------
+# 5. Créer une nouvelle question (authentification admin)
+# Exemple ajouté : Classification
+# ------------------------------
+curl -X POST "http://127.0.0.1:8000/create_question" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "admin_username": "admin",
+           "admin_password": "4dm1N",
+           "question": "Quelle métrique est utilisée en classification ?",
+           "subject": "Classification",
+           "correct": "A",
+           "use": "Test de validation",
+           "responseA": "Le F1-score",
+           "responseB": "Le RMSE",
+           "responseC": "La perplexité",
+           "responseD": "",
+           "remark": "Question sur les métriques de classification"
+         }'
